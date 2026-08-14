@@ -39,14 +39,25 @@ references:
 
 # ------------------------------------------------------------
 # 评审模型隔离（严格质检用）
-# 约定：评审模型与作者模型必须不同，避免同源偏差。
-#   author_model   —— 撰写三件套的主建模模型
-#   reviewer_model —— 双独立评审模型（留空 = 未配置，隔离机制待定）
-#   isolation      —— 隔离机制说明（占位，后续由用户拍板后填写）
-# 评审模型如何隔离（切换 CLI 模型 / 独立 agent / 远程调用）由 isolation 描述，
-# 尚未确定前 reviewer_model 保持空，SKILL 会在派发评审前检查并阻断。
+# 机制：评审走外部 LLM API 脚本（run_review.py），与作者异源；
+#       脚本只读三件套，不携带作者思考过程/自检结果，天然无上下文污染。
+#   author_model —— 撰写三件套的主建模模型（gpt5.6-sol，用户指定）
+#   reviewers    —— 双独立评审（R1=deepseek v4 pro, R2=kimi k3）
+#                   API Key 从 .env 读取，绝不硬编码。
+# ⚠️ model 名为用户口语名称，请按各家官方 API 文档核对真实 model ID：
+#    DeepSeek 通用 ID 常为 deepseek-chat；Moonshot 常为 moonshot-v1-*/kimi-k*。
 # ------------------------------------------------------------
 review:
-  author_model: "claude-sonnet-5"       # 主建模模型（示例，按实际填）
-  reviewer_model: ""                    # 评审模型（待隔离机制确定后填）
-  isolation: ""                         # 隔离机制（占位，待用户指定）
+  author_model: "gpt5.6-sol"            # 主建模模型（用户指定；请核对官方 model ID）
+  isolation: "external-api"             # 隔离机制：外部 API 脚本评审，异源
+  reviewers:
+    R1:
+      provider: "deepseek"
+      model: "deepseek-v4-pro"          # 用户指定；请核对 DeepSeek 官方 API model ID
+      base_url: "https://api.deepseek.com"
+      api_key_env: "DEEPSEEK_API_KEY"
+    R2:
+      provider: "kimi"
+      model: "kimi-k3"                  # 用户指定；请核对 Moonshot 官方 API model ID
+      base_url: "https://api.moonshot.cn/v1"
+      api_key_env: "KIMI_API_KEY"

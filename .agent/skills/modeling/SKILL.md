@@ -38,8 +38,8 @@ Markdown 供人阅读，JSON 合同供下游编码/审查 Skill 稳定消费。
 
 - **L0 确定性 Schema 校验**：`python .agent/skills/modeling/scripts/validate_model_contract.py --contract projects/02_modeling/model-contract.json`
 - **L1 作者自检**：按 `references/质检清单.md` 逐条确定性勾选。
-- **L2 双独立评审**：派发两个未参与编写的只读 reviewer，各按 `references/评审标准.md` 产出 findings，交叉合并。派发前先校验 `tools_config.yaml` 的 `review` 段：`reviewer_model` 非空且与 `author_model` 隔离（隔离机制见 `isolation`，待用户指定）；未配置则判 `BLOCKED`，不得用作者模型冒充评审。
-- **L3 门禁 M1**：汇总写入 `projects/02_modeling/qa/M1.json`，跑 `validate_gate_receipt.py`。
+- **L2 双独立评审**：运行 `python .agent/skills/modeling/scripts/run_review.py`，调外部模型（Kimi/GPT，见 `tools_config.yaml` 的 `review.reviewers`）对三件套做对抗性评审，产出 `qa/R1.json`、`qa/R2.json`。派发前先校验 `review.reviewers` 已配置且与 `author_model` 异源；未配置则判 `BLOCKED`，不得用作者模型冒充评审。
+- **L3 门禁 M1**：跑 `generate_gate_receipt.py` 汇总 L0–L2 写入 `projects/02_modeling/qa/M1.json`，再跑 `validate_gate_receipt.py` 校验。
 
 ## 何时加载
 
