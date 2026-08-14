@@ -101,6 +101,8 @@ dependencies:
 
   # ---------- 纯 pip 包 (conda-forge 无 / 需紧跟上游) ----------
   - pip:
+      # 质检基础设施（建模 skill 的 L0/L3 确定性校验）
+      - jsonschema              # model-contract / gate-receipt 的 JSON Schema 校验
       # 可视化
       - scienceplots           # SciencePlots 学术样式 (IEEE/Nature/AAAS)
       - kaleido                # Plotly 静态图导出 PDF/SVG

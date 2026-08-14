@@ -27,3 +27,26 @@ viz:                                     # 可视化规范（脚本自动读取�
   palette: "NPG"                         # 学术色板：NPG / AAAS
   font_size_min: 8                       # 字号 ≥ 8pt
   format: "pdf"                          # 论文图统一导出矢量
+
+# ------------------------------------------------------------
+# 外部参考资料（只读引用，不复制进本仓库；路径按本机调整）
+# 建模 skill 的 L0 schema 校验与理论查阅统一从这里解析
+# ------------------------------------------------------------
+references:
+  modeling_design_theory: "../math_modeling/.agents/skills/modeling-analysis/references/建模设计理论.md"
+  common_patterns: "../math_modeling/.agents/skills/modeling-analysis/references/常见模式.md"
+  model_contract_schema: "../math_modeling/reference/schemas/model-contract.schema.json"
+
+# ------------------------------------------------------------
+# 评审模型隔离（严格质检用）
+# 约定：评审模型与作者模型必须不同，避免同源偏差。
+#   author_model   —— 撰写三件套的主建模模型
+#   reviewer_model —— 双独立评审模型（留空 = 未配置，隔离机制待定）
+#   isolation      —— 隔离机制说明（占位，后续由用户拍板后填写）
+# 评审模型如何隔离（切换 CLI 模型 / 独立 agent / 远程调用）由 isolation 描述，
+# 尚未确定前 reviewer_model 保持空，SKILL 会在派发评审前检查并阻断。
+# ------------------------------------------------------------
+review:
+  author_model: "claude-sonnet-5"       # 主建模模型（示例，按实际填）
+  reviewer_model: ""                    # 评审模型（待隔离机制确定后填）
+  isolation: ""                         # 隔离机制（占位，待用户指定）

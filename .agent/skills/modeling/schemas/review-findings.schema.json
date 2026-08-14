@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mathmodelingprepare.local/schemas/review-findings.schema.json",
+  "title": "Independent review findings (single reviewer)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "reviewer_id",
+    "model",
+    "reviewed_at_utc",
+    "independence_attested",
+    "findings"
+  ],
+  "properties": {
+    "reviewer_id": {"type": "string", "minLength": 1},
+    "model": {"type": "string", "minLength": 1},
+    "reviewed_at_utc": {"type": "string", "format": "date-time"},
+    "independence_attested": {"type": "boolean"},
+    "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}}
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "severity", "claim", "evidence", "suggestion"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "severity": {"type": "string", "enum": ["P0", "P1", "P2"]},
+        "claim": {"type": "string", "minLength": 1},
+        "evidence": {"type": "string"},
+        "suggestion": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
