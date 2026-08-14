@@ -1,0 +1,25 @@
+# ============================================================
+# AI Agent 全局配置
+# ============================================================
+
+model: "claude-sonnet-5"          # 可按需切换（建模/代码场景）
+temperature: 0.2                   # 低温度，保证可复现
+max_tokens: 8192
+
+tools:
+  whitelist:
+    - read_file
+    - write_file
+    - run_python
+    - search_web              # 仅限文献检索
+  blacklist:
+    - shell                   # 默认禁止执行任意 shell
+
+compliance:
+  redlines_file: ".agent/config/redlines.md"              # 合规红线（每次任务前加载）
+  no_core_code_gen: true                                  # 禁止生成核心模型/求解代码
+  citation_source: "reference/literature/zotero_library.bib"  # 唯一引用真相源
+
+paths:
+  tools_config: "tools_config.yaml"
+  literature: "reference/literature"

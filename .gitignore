@@ -1,0 +1,39 @@
+# ============================================================
+# Git 忽略规则
+# ============================================================
+
+# 数据与大型文件
+projects/01_data/raw/
+*.parquet
+*.h5
+*.pt
+*.pth
+*.onnx
+*.bin
+
+# 模型权重
+models/*.ckpt
+weights/
+
+# 密钥与本地配置
+.env
+tools_config.yaml            # 含本地路径与密钥，不提交
+!tools_config.example.yaml
+
+# Python / Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 缓存与中间产物
+.cache/
+.DS_Store
+projects/02_modeling/experiments/*/output/
+
+# 编译产物
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg

@@ -1,0 +1,144 @@
+# ============================================================
+# 华为杯研究生数学建模 — Conda 环境
+# 环境名: huawei_mathmod     Python 3.11（兼容 3.10）
+# 创建:   conda env create -f environment.yml
+# 更新:   conda env update -f environment.yml --prune
+# 约定:   优先 conda-forge；纯 pip 包统一放 pip 子节点并标注用途。
+#         GPU 相关 (PyTorch/JAX/Paddle CUDA) 需按本机 CUDA 版本另装，见文末。
+# ============================================================
+name: huawei_mathmod
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.11
+  - pip
+  - setuptools
+  - wheel
+
+  # ---------- 交互 / 开发环境 ----------
+  - jupyterlab>=4.0           # 主交互环境
+  - notebook
+  - ipykernel
+  - nb_conda_kernels
+  - ipywidgets
+  - jupyter-resource-usage    # JupyterLab 资源面板 (CPU/内存实时监控)
+  - nodejs                    # JupyterLab 扩展依赖
+
+  # ---------- 数据工程 (Polars/Dask 为高速主干) ----------
+  - polars                    # 高速 DataFrame（主力）
+  - dask                      # 超内存 / 分布式计算
+  - distributed               # Dask 调度器
+  - pandas                    # 兜底与生态兼容
+  - pyarrow                   # 列式存储 (Parquet/Feather)
+  - openpyxl                  # Excel 读写
+  - xlrd                      # 旧版 .xls
+  - python-docx               # Word 文档读写
+  - python-pptx               # PPT 读写
+  - lxml
+
+  # ---------- 科学计算 ----------
+  - numpy
+  - scipy
+  - sympy                     # 符号计算 / 公式推导
+  - numba                     # JIT 加速
+  - networkx                  # 图论 / 网络
+  - statsmodels               # 统计建模
+  - cvxpy                     # 凸优化（与 Gurobi/CPLEX 配合）
+
+  # ---------- 机器学习 ----------
+  - scikit-learn
+  - xgboost                   # 表格数据强基线
+  - lightgbm
+  - catboost
+  - imbalanced-learn          # 类别不平衡处理
+  - optuna                    # 超参数优化
+  - shap                      # 模型可解释性
+
+  # ---------- 深度学习 (CPU 兜底版；GPU 见文末说明) ----------
+  - pytorch
+  - torchvision
+  - torchaudio
+
+  # ---------- 可视化 (学术出版级) ----------
+  - matplotlib
+  - seaborn
+  - plotly
+  - bokeh
+  - palettable                # 学术色板库 (NPG/AAAS 等)
+  - cairosvg                  # SVG 渲染 / 导出
+
+  # ---------- GIS / 地理空间 ----------
+  - geopandas
+  - folium                    # 交互式地图
+  - osmnx                     # OpenStreetMap 路网
+  - shapely
+  - fiona
+  - rasterio
+  - pyproj
+  - contextily                # 在线底图
+
+  # ---------- NLP / 文本 ----------
+  - jieba                     # 中文分词
+  - nltk
+
+  # ---------- 通用工具 / 基础设施 ----------
+  - tqdm                      # 进度条
+  - loguru                    # 日志
+  - pyyaml                    # 解析 tools_config.yaml
+  - python-dotenv             # 加载 .env
+  - requests
+  - httpx
+  - beautifulsoup4
+  - rich                      # 终端美化输出
+  - joblib
+  - cloudpickle
+  - h5py
+  - netcdf4
+  - zarr
+  - tesseract                 # OCR 引擎 (系统级二进制)
+
+  # ---------- 纯 pip 包 (conda-forge 无 / 需紧跟上游) ----------
+  - pip:
+      # 可视化
+      - scienceplots           # SciencePlots 学术样式 (IEEE/Nature/AAAS)
+      - kaleido                # Plotly 静态图导出 PDF/SVG
+      # 优化 / 启发式
+      - scikit-opt             # GA/PSO/SA/蚁群 等启发式算法
+      - pymoo                  # 多目标优化 (NSGA-II 等)
+      # 深度学习 (HuggingFace 生态，紧跟上游)
+      - transformers           # 预训练模型（NLP/CV/表格/公式识别）
+      - accelerate
+      - datasets
+      - sentence-transformers  # 语义向量 / 文献语义检索
+      - einops
+      # 表格 / OCR / 公式
+      - paddlepaddle           # PaddlePaddle (CPU)
+      - paddleocr              # PaddleOCR 文字识别
+      - table-transformer      # 表格结构识别（模型经 HF transformers/Detr 加载）
+      - pytesseract            # tesseract 的 Python 封装
+      # 文献处理
+      - bibtexparser           # BibTeX 解析（引用完整性校验）
+      - pybtex                 # BibTeX 引用处理
+      - pdfplumber             # PDF 文本/表格抽取
+      - camelot-py[cv]         # PDF 表格抽取（依赖 ghostscript/opencv）
+      # 数据下载 / 其他
+      - gdown                  # Google Drive 大文件下载
+      - opencv-python          # 图像处理
+      - rapidfuzz              # 模糊字符串匹配
+      - umap-learn             # 降维
+      - tensorboard            # 训练监控
+
+# ============================================================
+# 【GPU 安装说明】（Conda 无法跨平台确定 CUDA 版本，故不写死）
+# 用 nvidia-smi 查本机 CUDA 版本后，二选一：
+#
+# 1) PyTorch CUDA（以 cu121 为例）：
+#    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+#
+# 2) JAX CUDA（以 cu12 为例）：
+#    pip install --upgrade "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+#
+# PaddlePaddle-GPU：按 PaddlePaddle 官网对应 CUDA 版本安装 paddlepaddle-gpu。
+# ============================================================

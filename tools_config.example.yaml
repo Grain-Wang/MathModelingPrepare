@@ -1,0 +1,29 @@
+# ============================================================
+# tools_config.example.yaml — 可提交的模板
+# 使用：复制为 tools_config.yaml 并填写本机真实路径与密钥
+# ============================================================
+
+paths:                                   # 本地软件执行路径（各成员按本机填写）
+  python: "conda run -n huawei_mathmod python"
+  latex: "<你的 xelatex.exe 绝对路径>"
+  originpro: "<Origin.exe 绝对路径，若无则留空>"
+  drawio: "<draw.io.exe 绝对路径>"
+  zotero: "<zotero.exe 绝对路径>"
+  mathpix_cli: "<mathpix.exe 绝对路径，若无则留空>"
+
+bib:
+  zotero_export: "reference/literature/zotero_library.bib"  # 唯一引用真相源
+  better_bibtex_auto_export: true
+
+apis:                                    # API Key 占位（真实值走 .env）
+  gurobi_license: "${GUROBI_LICENSE}"
+  openai_api_key: "${OPENAI_API_KEY}"
+  anthropic_api_key: "${ANTHROPIC_API_KEY}"
+  kimi_api_key: "${KIMI_API_KEY}"
+  semantic_scholar_key: "${SEMANTIC_SCHOLAR_KEY}"
+  hf_token: "${HF_TOKEN}"
+
+viz:                                     # 可视化规范
+  palette: "NPG"                         # 学术色板：NPG / AAAS
+  font_size_min: 8                       # 字号 ≥ 8pt
+  format: "pdf"                          # 论文图统一导出矢量

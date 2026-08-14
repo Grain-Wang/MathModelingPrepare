@@ -1,0 +1,13 @@
+# 合规红线（每次 Agent 任务前必须加载）
+
+1. **引用唯一真相源**：所有参考文献必须以 `reference/literature/zotero_library.bib`
+   为准，严禁直接使用 AI 生成的引用条目；AI 发现的文献必须先导入 Zotero。
+
+2. **禁生成核心内容**：AI（Kimi/ChatGPT/Claude）仅限 debug、润色、概念解释、文献速读，
+   严禁生成核心模型、求解算法或关键代码。
+
+3. **赛题只读**：`competition/` 目录为只读绝对基准，任何改动视为违规。
+
+4. **密钥不落盘**：API Key 只放 `.env`（已 gitignore），不得写入代码或提交。
+
+5. **结果可复现**：所有结论必须能通过 `scripts/` 脚本从原始数据复现。

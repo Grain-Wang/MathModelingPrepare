@@ -1,0 +1,29 @@
+# ============================================================
+# tools_config.yaml — 本地工具路径 + API Key 映射（Agent/脚本统一读取）
+# ⚠️ 含敏感信息，.gitignore 已排除，勿提交；真实密钥放 .env / 环境变量
+# ============================================================
+
+paths:                                   # 本地软件执行路径（按各成员机器填写）
+  python: "conda run -n huawei_mathmod python"
+  latex: "C:/texlive/2026/bin/windows/xelatex.exe"      # LaTeX 编译
+  originpro: "C:/Program Files/OriginLab/Origin2026/Origin.exe"  # 出版级图精修
+  drawio: "C:/Program Files/draw.io/draw.io.exe"        # 架构图
+  zotero: "C:/Program Files/Zotero/zotero.exe"          # 文献管理
+  mathpix_cli: "C:/Program Files/Mathpix/mathpix.exe"
+
+bib:
+  zotero_export: "reference/literature/zotero_library.bib"  # 唯一引用真相源
+  better_bibtex_auto_export: true
+
+apis:                                    # API Key 占位（真实值走 .env）
+  gurobi_license: "${GUROBI_LICENSE}"
+  openai_api_key: "${OPENAI_API_KEY}"    # 仅 debug/润色
+  anthropic_api_key: "${ANTHROPIC_API_KEY}"
+  kimi_api_key: "${KIMI_API_KEY}"
+  semantic_scholar_key: "${SEMANTIC_SCHOLAR_KEY}"
+  hf_token: "${HF_TOKEN}"                # HuggingFace 模型下载
+
+viz:                                     # 可视化规范（脚本自动读取，风格统一）
+  palette: "NPG"                         # 学术色板：NPG / AAAS
+  font_size_min: 8                       # 字号 ≥ 8pt
+  format: "pdf"                          # 论文图统一导出矢量
