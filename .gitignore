@@ -37,3 +37,7 @@ projects/02_modeling/experiments/*/output/
 *.toc
 *.bbl
 *.blg
+
+# 历届竞赛资料（仅本地保留）
+/reference/prev_competitions/
+/reference/winning_papers/
