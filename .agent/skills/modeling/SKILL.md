@@ -1,11 +1,11 @@
 ---
 name: modeling
-description: 数学建模主技能：读题、拆解子问题、选择最小充分模型、写出严谨的模型合同，并通过多级检查（确定性校验、作者自检、双独立评审）与 M1 门禁后交付。用于华为杯赛题的建模阶段。
+description: 数学建模主技能：读题、拆解子问题、选择最小充分模型、写出严谨的模型合同，并通过确定性校验、作者自检、DeepSeek API 与 ChatGPT Pro 网页端双通道评审后交付。用于华为杯赛题的建模阶段。
 ---
 
 # 主建模
 
-把本 Skill 作为建模阶段的唯一入口：完成「读题 → 拆解 → 选型 → 数学定义 → 验证方案 → 三件套 → 多级检查 → M1 门禁」全流程。产物只写入 `projects/02_modeling/`；`competition/`、外部参考与 Schema 一律只读。
+把本 Skill 作为建模阶段的唯一入口：完成「读题 → 拆解 → 选型 → 数学定义 → 验证方案 → 三件套 → 确定性校验 → 作者自检 → 双通道评审」全流程。产物只写入 `projects/02_modeling/`；`competition/`、外部参考与 Schema 一律只读。
 
 ## 运行约定
 
@@ -32,14 +32,15 @@ Markdown 供人阅读，JSON 合同供下游编码/审查 Skill 稳定消费。
 4. 最小充分模型集合，每个模型定角色与必要性。
 5. 数学定义 + 算法步骤/停止条件/复杂度。
 6. 验证方案（留出/回测/残差/可行性/灵敏度，阈值注明依据）。
-7. 写三件套 → 跑 L0 → L1 → L2（双独立评审）→ L3（M1 门禁），见 `references/门禁与打回.md`。
+7. 写三件套 → 确定性校验 → 作者自检 → DeepSeek API 与 ChatGPT Pro 网页端分别评审，见 `references/门禁与打回.md`。
 
-## 多级检查（任一不通过即打回重改）
+## 校验与评审（发现 P0/P1 即打回重改）
 
-- **L0 确定性 Schema 校验**：`python .agent/skills/modeling/scripts/validate_model_contract.py --contract projects/02_modeling/model-contract.json`
-- **L1 作者自检**：按 `references/质检清单.md` 逐条确定性勾选。
-- **L2 双独立评审**：运行 `python .agent/skills/modeling/scripts/run_review.py`，调外部模型（Kimi/GPT，见 `tools_config.yaml` 的 `review.reviewers`）对三件套做对抗性评审，产出 `qa/R1.json`、`qa/R2.json`。派发前先校验 `review.reviewers` 已配置且与 `author_model` 异源；未配置则判 `BLOCKED`，不得用作者模型冒充评审。
-- **L3 门禁 M1**：跑 `generate_gate_receipt.py` 汇总 L0–L2 写入 `projects/02_modeling/qa/M1.json`，再跑 `validate_gate_receipt.py` 校验。
+- **确定性 Schema 校验**：`python .agent/skills/modeling/scripts/validate_model_contract.py --contract projects/02_modeling/model-contract.json`
+- **作者自检**：按 `references/质检清单.md` 逐条确定性勾选。
+- **DeepSeek API 评审**：运行 `python .agent/skills/modeling/scripts/run_review.py`，只调用 `tools_config.yaml` 中 `access: api` 的 DeepSeek reviewer，产出 `projects/02_modeling/qa/R1.json`。
+- **ChatGPT Pro 网页端评审**：不由脚本调用且不使用 API Key。它以只读方式查看 `tools_config.yaml` 的 `repository_read_scope`，按照 `references/评审标准.md` 给出反馈，由参赛队员转交。
+- 两个渠道互不读取对方反馈；参赛队员确认两方 P0/P1 均处理后，才进入编码阶段。不生成自动门禁回执。
 
 ## 何时加载
 
@@ -51,7 +52,7 @@ Markdown 供人阅读，JSON 合同供下游编码/审查 Skill 稳定消费。
 | 写合同 | `references/前置合同.md` |
 | 交付前自检 | `references/质检清单.md` |
 | 独立评审 | `references/评审标准.md` |
-| 门禁与打回 | `references/门禁与打回.md` |
+| 校验、评审与打回 | `references/门禁与打回.md` |
 
 ## 选择原则
 
@@ -61,4 +62,4 @@ Markdown 供人阅读，JSON 合同供下游编码/审查 Skill 稳定消费。
 
 ## 反馈修正
 
-编码阶段反馈模型不可实现时，基于具体报错与数据证据修订三件套，并重跑全部检查；不另建平行版本。
+收到任一评审渠道的修改建议，或编码阶段反馈模型不可实现时，基于具体问题与数据证据修订三件套，并重新完成校验、自检和两方复核；不另建平行版本。

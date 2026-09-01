@@ -31,7 +31,7 @@ def main(citekeys):
         if not citekeys
         else [e for e in lib.entries if e.get("ID") in citekeys]
     )
-    # TODO: 在此调用 AI（Claude/Kimi）对每个 entry 执行 literature-extract Skill
+    # TODO: 在此调用已配置的 AI 对每个 entry 执行 literature-extract Skill
     for e in targets:
         print(f"[提取] {e.get('ID')} -> reading_notes/{e.get('ID')}.md")
 

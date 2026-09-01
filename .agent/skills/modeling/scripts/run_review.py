@@ -1,17 +1,16 @@
-"""L2 独立评审执行器：调外部 LLM API 对三件套做对抗性评审。
+"""DeepSeek API 独立评审执行器：对三件套做对抗性评审。
 
 隔离机制：
-    评审由外部模型（Kimi / GPT 等，配置见 tools_config.yaml 的 review.reviewers）执行，
-    与作者会话异源；本脚本只读三件套，不携带作者思考过程/自检结果，天然无上下文污染。
+    本脚本只调用 tools_config.yaml 中 access=api 的 DeepSeek reviewer，
+    与作者会话异源；脚本只读三件套，不携带作者思考过程/自检结果。
+    ChatGPT Pro 评审由参赛队员在网页端独立发起，不由本脚本调用。
 
 用法：
-    python .agent/skills/modeling/scripts/run_review.py                # 全部 reviewer
-    python .agent/skills/modeling/scripts/run_review.py --reviewer R1  # 仅 R1
+    python .agent/skills/modeling/scripts/run_review.py
     python .agent/skills/modeling/scripts/run_review.py --problem competition/problem
 
 输出：
-    每位 reviewer 一份 projects/02_modeling/qa/{reviewer_id}.json，
-    符合 schemas/review-findings.schema.json。
+    projects/02_modeling/qa/R1.json，符合 schemas/review-findings.schema.json。
 
 依赖：requests、python-dotenv、jsonschema、pyyaml（均在 environment.yml）。
 API Key 从 .env 读（gitignored），不硬编码、不打印。
@@ -35,6 +34,10 @@ ARTIFACTS = [
     ("题目分析报告.md", "analysis_report"),
     ("术语表格.md", "terminology_table"),
     ("model-contract.json", "model_contract"),
+]
+REVIEW_CONTEXT = [
+    (REPO_ROOT / "AGENTS.md", "authoring_rules"),
+    (REPO_ROOT / "reference" / "literature" / "zotero_library.bib", "citation_source"),
 ]
 
 
@@ -73,6 +76,11 @@ def read_problem_extra(problem_dir: Path) -> str:
 
 def build_bundle(problem_dir: Path) -> str:
     parts = []
+    for path, role in REVIEW_CONTEXT:
+        if not path.exists():
+            print(f"[错误] 评审上下文缺失：{path}", file=sys.stderr)
+            sys.exit(1)
+        parts.append(f"\n===== [{role}] {path.relative_to(REPO_ROOT)} =====\n{load_text(path)}")
     for name, role in ARTIFACTS:
         p = WRITE_ROOT / name
         if not p.exists():
@@ -150,7 +158,11 @@ def call_reviewer(cfg: dict, standards: str, bundle: str) -> list:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--reviewer", action="append", default=None, help="只跑指定 reviewer（可多次）")
-    parser.add_argument("--problem", default=None, help="原始题目/附件目录（可选，只读）")
+    parser.add_argument(
+        "--problem",
+        default=str(REPO_ROOT / "competition"),
+        help="原始题目/附件目录（默认 competition，只读）",
+    )
     args = parser.parse_args()
 
     try:
@@ -169,7 +181,16 @@ def main():
         print("[错误] tools_config.yaml 的 review.reviewers 未配置", file=sys.stderr)
         sys.exit(2)
 
-    selected = args.reviewer or list(reviewers_cfg.keys())
+    api_reviewers = {
+        rid: reviewer
+        for rid, reviewer in reviewers_cfg.items()
+        if reviewer.get("access") == "api"
+    }
+    if not api_reviewers:
+        print("[错误] 未配置 access=api 的 DeepSeek reviewer", file=sys.stderr)
+        sys.exit(2)
+
+    selected = args.reviewer or list(api_reviewers.keys())
     standards = load_text(STANDARDS_PATH)
     bundle = build_bundle(Path(args.problem) if args.problem else None)
 
@@ -180,10 +201,13 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
 
     for rid in selected:
-        if rid not in reviewers_cfg:
-            print(f"[错误] 未找到 reviewer：{rid}", file=sys.stderr)
+        if rid not in api_reviewers:
+            print(f"[错误] 未找到 API reviewer：{rid}", file=sys.stderr)
             sys.exit(2)
-        r = reviewers_cfg[rid]
+        r = api_reviewers[rid]
+        if r.get("provider") != "deepseek":
+            print(f"[错误] API reviewer {rid} 不是 DeepSeek", file=sys.stderr)
+            sys.exit(2)
         print(f"[评审中] {rid} via {r['provider']}/{r['model']} …")
         findings = call_reviewer(r, standards, bundle)
         obj = {
@@ -208,7 +232,7 @@ def main():
         n_p1 = sum(1 for x in findings if x.get("severity") == "P1")
         print(f"[完成] {rid} → {out_path}（P0×{n_p0} P1×{n_p1} 共 {len(findings)} 条）")
 
-    print("L2 评审完成。汇总请进入 L3 门禁 M1 裁定。")
+    print("DeepSeek API 评审完成。请另行在 ChatGPT Pro 网页端完成只读评审。")
     sys.exit(0)
 
 

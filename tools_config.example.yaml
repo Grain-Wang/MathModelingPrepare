@@ -18,8 +18,7 @@ bib:
 apis:                                    # API Key 占位（真实值走 .env）
   gurobi_license: "${GUROBI_LICENSE}"
   openai_api_key: "${OPENAI_API_KEY}"
-  anthropic_api_key: "${ANTHROPIC_API_KEY}"
-  kimi_api_key: "${KIMI_API_KEY}"
+  deepseek_api_key: "${DEEPSEEK_API_KEY}"
   semantic_scholar_key: "${SEMANTIC_SCHOLAR_KEY}"
   hf_token: "${HF_TOKEN}"
 
@@ -27,3 +26,29 @@ viz:                                     # 可视化规范
   palette: "NPG"                         # 学术色板：NPG / AAAS
   font_size_min: 8                       # 字号 ≥ 8pt
   format: "pdf"                          # 论文图统一导出矢量
+
+review:
+  author_model: "gpt5.6-sol"
+  isolation: "independent-channels"
+  reviewers:
+    R1:
+      provider: "deepseek"
+      access: "api"
+      model: "deepseek-v4-pro"          # DeepSeek 官方 API model ID
+      base_url: "https://api.deepseek.com"
+      api_key_env: "DEEPSEEK_API_KEY"
+    R2:
+      provider: "openai"
+      product: "chatgpt-pro"
+      access: "web"
+      api_key_required: false
+      repository_permission: "read-only"
+      repository_read_scope:
+        - ".agent/skills/modeling/references/评审标准.md"
+        - "AGENTS.md"
+        - "competition/**"
+        - "projects/02_modeling/题目分析报告.md"
+        - "projects/02_modeling/术语表格.md"
+        - "projects/02_modeling/model-contract.json"
+        - "reference/literature/zotero_library.bib"
+      feedback_handoff: "manual-by-team"

@@ -18,8 +18,7 @@ bib:
 apis:                                    # API Key 占位（真实值走 .env）
   gurobi_license: "${GUROBI_LICENSE}"
   openai_api_key: "${OPENAI_API_KEY}"    # 仅 debug/润色
-  anthropic_api_key: "${ANTHROPIC_API_KEY}"
-  kimi_api_key: "${KIMI_API_KEY}"
+  deepseek_api_key: "${DEEPSEEK_API_KEY}" # DeepSeek API 评审
   semantic_scholar_key: "${SEMANTIC_SCHOLAR_KEY}"
   hf_token: "${HF_TOKEN}"                # HuggingFace 模型下载
 
@@ -38,26 +37,35 @@ references:
   model_contract_schema: "../math_modeling/reference/schemas/model-contract.schema.json"
 
 # ------------------------------------------------------------
-# 评审模型隔离（严格质检用）
-# 机制：评审走外部 LLM API 脚本（run_review.py），与作者异源；
-#       脚本只读三件套，不携带作者思考过程/自检结果，天然无上下文污染。
+# 评审模型隔离（阶段性成果复核用）
+# 机制：DeepSeek 走外部 API；ChatGPT Pro 走网页端并只读指定仓库内容。
+#       两方分别反馈，由参赛队员汇总、确认并转交给建模作者。
 #   author_model —— 撰写三件套的主建模模型（gpt5.6-sol，用户指定）
-#   reviewers    —— 双独立评审（R1=deepseek v4 pro, R2=kimi k3）
-#                   API Key 从 .env 读取，绝不硬编码。
-# ⚠️ model 名为用户口语名称，请按各家官方 API 文档核对真实 model ID：
-#    DeepSeek 通用 ID 常为 deepseek-chat；Moonshot 常为 moonshot-v1-*/kimi-k*。
+#   reviewers    —— R1=DeepSeek API，R2=ChatGPT Pro 网页端（不使用 API Key）
+# DeepSeek model 使用官方 API ID。
 # ------------------------------------------------------------
 review:
   author_model: "gpt5.6-sol"            # 主建模模型（用户指定；请核对官方 model ID）
-  isolation: "external-api"             # 隔离机制：外部 API 脚本评审，异源
+  isolation: "independent-channels"     # API 与网页端分离，避免共享评审上下文
   reviewers:
     R1:
       provider: "deepseek"
-      model: "deepseek-v4-pro"          # 用户指定；请核对 DeepSeek 官方 API model ID
+      access: "api"
+      model: "deepseek-v4-pro"          # DeepSeek 官方 API model ID
       base_url: "https://api.deepseek.com"
       api_key_env: "DEEPSEEK_API_KEY"
     R2:
-      provider: "kimi"
-      model: "kimi-k3"                  # 用户指定；请核对 Moonshot 官方 API model ID
-      base_url: "https://api.moonshot.cn/v1"
-      api_key_env: "KIMI_API_KEY"
+      provider: "openai"
+      product: "chatgpt-pro"
+      access: "web"
+      api_key_required: false
+      repository_permission: "read-only"
+      repository_read_scope:
+        - ".agent/skills/modeling/references/评审标准.md"
+        - "AGENTS.md"
+        - "competition/**"
+        - "projects/02_modeling/题目分析报告.md"
+        - "projects/02_modeling/术语表格.md"
+        - "projects/02_modeling/model-contract.json"
+        - "reference/literature/zotero_library.bib"
+      feedback_handoff: "manual-by-team"
