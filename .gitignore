@@ -41,3 +41,7 @@ projects/02_modeling/experiments/*/output/
 # 历届竞赛资料（仅本地保留）
 /reference/prev_competitions/
 /reference/winning_papers/
+
+# 官方竞赛附件（本地只读，不提交）
+/competition/data/*
+!/competition/data/.gitkeep

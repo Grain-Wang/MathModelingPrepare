@@ -4,7 +4,7 @@
 # ============================================================
 
 paths:                                   # 本地软件执行路径（各成员按本机填写）
-  python: "conda run -n huawei_mathmod python"
+  python: "conda run -n math_modeling python"
   latex: "<你的 xelatex.exe 绝对路径>"
   originpro: "<Origin.exe 绝对路径，若无则留空>"
   drawio: "<draw.io.exe 绝对路径>"
@@ -44,7 +44,7 @@ review:
       api_key_required: false
       repository_permission: "read-only"
       repository_read_scope:
-        - ".agent/skills/modeling/references/评审标准.md"
+        - ".agents/skills/modeling/references/评审标准.md"
         - "AGENTS.md"
         - "competition/**"
         - "projects/02_modeling/题目分析报告.md"

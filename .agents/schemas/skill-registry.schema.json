@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://math-modeling.local/schemas/skill-registry.schema.json",
+  "title": "Project skill registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "environment", "skills"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "platform", "manifest", "lockfile", "core_dependencies"],
+      "properties": {
+        "name": {"const": "math_modeling"},
+        "platform": {"const": "win-64"},
+        "manifest": {"const": "environment.yml"},
+        "lockfile": {"const": "environment.win-64.lock.yml"},
+        "core_dependencies": {"$ref": "#/$defs/packageDependencies"}
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/skill"}
+    }
+  },
+  "$defs": {
+    "packageDependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["conda", "pip"],
+      "properties": {
+        "conda": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "pip": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "location", "revision", "license"],
+      "properties": {
+        "type": {"enum": ["team", "official", "third-party", "local"]},
+        "location": {"type": "string", "minLength": 1},
+        "revision": {"type": "string", "minLength": 1},
+        "license": {"type": "string", "minLength": 1}
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": {"enum": ["executable", "path", "mcp"]},
+        "value": {"type": "string", "minLength": 1}
+      }
+    },
+    "externalDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "manager", "package", "check"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "manager": {"enum": ["winget", "npm"]},
+        "package": {"type": "string", "minLength": 1},
+        "check": {"$ref": "#/$defs/check"}
+      }
+    },
+    "mcpDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "transport", "env_vars"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
+        "transport": {"enum": ["stdio", "http"]},
+        "command": {"type": "string", "minLength": 1},
+        "args": {"type": "array", "items": {"type": "string"}},
+        "url": {"type": "string", "minLength": 1},
+        "bearer_token_env_var": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"},
+        "env_vars": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"},
+          "uniqueItems": true
+        },
+        "install": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["manager", "package"],
+          "properties": {
+            "manager": {"enum": ["pip", "npm", "winget"]},
+            "package": {"type": "string", "minLength": 1}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"transport": {"const": "stdio"}}},
+          "then": {"required": ["command", "args"]}
+        },
+        {
+          "if": {"properties": {"transport": {"const": "http"}}},
+          "then": {"required": ["url"]}
+        }
+      ]
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["conda", "pip", "external", "mcp"],
+      "properties": {
+        "conda": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "pip": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "external": {"type": "array", "items": {"$ref": "#/$defs/externalDependency"}},
+        "mcp": {"type": "array", "items": {"$ref": "#/$defs/mcpDependency"}}
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commands",
+        "evidence",
+        "last_result",
+        "last_validated_at",
+        "accepted_by",
+        "accepted_at"
+      ],
+      "properties": {
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {"type": "string"},
+            "minItems": 1
+          }
+        },
+        "evidence": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "last_result": {"type": ["string", "null"], "enum": ["pass", "fail", null]},
+        "last_validated_at": {"type": ["string", "null"], "format": "date-time"},
+        "accepted_by": {"type": ["string", "null"]},
+        "accepted_at": {"type": ["string", "null"], "format": "date-time"}
+      }
+    },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "description",
+        "tags",
+        "status",
+        "path",
+        "source",
+        "content_sha256",
+        "dependencies",
+        "validation"
+      ],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 63},
+        "description": {"type": "string", "minLength": 1},
+        "tags": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "status": {"enum": ["candidate", "accepted", "disabled"]},
+        "path": {
+          "type": "string",
+          "pattern": "^\\.agents/(skills|candidates)/[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "source": {"$ref": "#/$defs/source"},
+        "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "dependencies": {"$ref": "#/$defs/dependencies"},
+        "validation": {"$ref": "#/$defs/validation"}
+      }
+    }
+  }
+}

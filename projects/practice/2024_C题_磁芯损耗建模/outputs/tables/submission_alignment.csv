@@ -1,0 +1,7 @@
+﻿source_attachment,template_sheet,source_number_count,template_number_count,intersection_count,missing_in_template_count,extra_in_template_count,exact_number_set_match
+waveform_test,Sheet1,80,400,80,0,320,False
+waveform_test,Sheet2,80,0,0,80,0,False
+waveform_test,Sheet3,80,0,0,80,0,False
+loss_test,Sheet1,400,400,400,0,0,True
+loss_test,Sheet2,400,0,0,400,0,False
+loss_test,Sheet3,400,0,0,400,0,False

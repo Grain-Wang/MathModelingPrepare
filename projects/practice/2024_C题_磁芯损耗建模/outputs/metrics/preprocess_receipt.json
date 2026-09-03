@@ -1,0 +1,37 @@
+{
+  "deleted_row_count": 0,
+  "output_sha256": {
+    "data/cache/source_manifest.json": "173d5d6b6cb64b7d17b2260c9298472239875e6db5f787ad5dcc1791b696f47e",
+    "data/processed/attachment1_training.parquet": "be7e807baf1a9d2e540396a4041e40d3bf7966cf4bfeae1a2d43308b933f44e6",
+    "data/processed/attachment2_waveform_test.parquet": "9a73c5d7b4b49308466ddd89a0a0bf85bf7ee938fc48098a00865226ea9383a6",
+    "data/processed/attachment3_loss_test.parquet": "ca214d2c815c815b270f45531230720b6d335d3a8704542fd9ddca440ec28ce3",
+    "data/processed/base_features.parquet": "a7b04f8002c3640b96aac1272a889afb0ad0e1e4ae7ab9dfbcb237822f8cb5a6",
+    "outputs/figures/attachment_row_counts.png": "aa0e8a90d8d8407cd6079e3b831fb0f1a1a2045f1cf3900a633be9c84e48b79e",
+    "outputs/figures/quality_flags.png": "59760260338b073c175bda20b7ad20fbe1415d47223163ada70aa9150bab410e",
+    "outputs/figures/representative_waveforms.png": "277a30f3a163783ebd31f16d163ab78c10fea2e68d7dad937e3385eeeb8f3a18",
+    "outputs/figures/scalar_distributions.png": "e115a8156027fc39e1840a0452a242aaaa588163b4455043dace9ac6b585a0b3",
+    "outputs/tables/category_counts.csv": "12ba7515e6e8649fea825bf4588e4cff342c21dc113123a5c09b2764b5f6133c",
+    "outputs/tables/data_quality_audit.csv": "aa342ce273c2b78a9b9cb0c9113869b8baad6323f2f57759476cc133bf2d0127",
+    "outputs/tables/data_quality_summary.csv": "317ea3b51afd71945b016b6774f9feda31839f9bf6ebeb615442e83e406c6a28",
+    "outputs/tables/invalid_cells.csv": "0495c527092f08a894c1962ba3ff15610f5fb92928f39cc982ed2e9481e1d3e7",
+    "outputs/tables/submission_alignment.csv": "49821c5b9f4b7244eea3bff7d3a60343fa16e7404997fbfbd08edb0b29b2712d",
+    "outputs/tables/submission_template_mapping.csv": "8f09249de8595cda46196300d4a3f74845d020d701edeacfbd4daed1c379654d"
+  },
+  "quality_flag_counts": {
+    "exact_row_duplicate": 2,
+    "no_flags": 12878,
+    "waveform_duplicate_within_attachment": 2
+  },
+  "row_counts": {
+    "loss_test": 400,
+    "training": 12400,
+    "waveform_test": 80
+  },
+  "schema_version": 1,
+  "source_sha256": {
+    "loss_test": "8c403b8d7717e42567ec7c6dec204feff87023b83d45b87ec0c983c53a2d929a",
+    "submission_template": "d8fdffdf63839f7b40d5dd87be6923af04ad1d52180072a47c5b4df70832c1c8",
+    "training": "c16aee712bc0ad480b5285f17fa7fa57a5e22a1901d4a6adb0a1eb83ecfb7ffc",
+    "waveform_test": "b46a4bf69331a41d4cf6190c97906914619c76335bef43ef37ba148cd99fc66c"
+  }
+}

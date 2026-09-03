@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "competition_root": "../../../competition",
+  "allowed_extensions": [
+    ".xlsx",
+    ".xlsm",
+    ".xls"
+  ],
+  "roles": {
+    "training": {
+      "tokens": ["附件一", "附件1"],
+      "output": "attachment1_training.parquet"
+    },
+    "waveform_test": {
+      "tokens": ["附件二", "附件2"],
+      "output": "attachment2_waveform_test.parquet"
+    },
+    "loss_test": {
+      "tokens": ["附件三", "附件3"],
+      "output": "attachment3_loss_test.parquet"
+    },
+    "submission_template": {
+      "tokens": ["附件四", "附件4"]
+    }
+  },
+  "expected_waveform_points": 1024,
+  "representative_waveform_count": 12,
+  "random_seed": 202409
+}

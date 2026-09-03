@@ -4,7 +4,7 @@
 # ============================================================
 
 paths:                                   # 本地软件执行路径（按各成员机器填写）
-  python: "conda run -n huawei_mathmod python"
+  python: "conda run -n math_modeling python"
   latex: "C:/texlive/2026/bin/windows/xelatex.exe"      # LaTeX 编译
   originpro: "C:/Program Files/OriginLab/Origin2026/Origin.exe"  # 出版级图精修
   drawio: "C:/Program Files/draw.io/draw.io.exe"        # 架构图
@@ -61,7 +61,7 @@ review:
       api_key_required: false
       repository_permission: "read-only"
       repository_read_scope:
-        - ".agent/skills/modeling/references/评审标准.md"
+        - ".agents/skills/modeling/references/评审标准.md"
         - "AGENTS.md"
         - "competition/**"
         - "projects/02_modeling/题目分析报告.md"

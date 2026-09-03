@@ -1,0 +1,270 @@
+schema_version: 1
+environment:
+  name: math_modeling
+  platform: win-64
+  manifest: environment.yml
+  lockfile: environment.win-64.lock.yml
+  core_dependencies:
+    conda:
+    - python=3.11
+    - pip
+    - ipykernel
+    - numpy
+    - pandas
+    - scikit-learn
+    - matplotlib
+    - openpyxl
+    - xlrd
+    - pyyaml
+    - requests
+    - python-dotenv
+    - jsonschema
+    - bibtexparser
+    - conda-lock
+    pip:
+    - opencv-python==4.13.0.92
+skills:
+- name: citation-check
+  description: 校验 BibTeX 完整性、查重并生成引用校验清单。
+  tags:
+  - literature
+  - bibtex
+  - validation
+  status: accepted
+  path: .agents/skills/citation-check
+  source:
+    type: team
+    location: .
+    revision: worktree-baseline
+    license: project-internal
+  content_sha256: 5ce23c484a5a3303f091d3da37b5b56836ede3051e9e1336ca3823da9e308158
+  dependencies:
+    conda:
+    - bibtexparser
+    - pyyaml
+    pip: []
+    external: []
+    mcp: []
+  validation:
+    commands: []
+    evidence:
+    - docs/skill-dependency-standard.md
+    last_result: pass
+    last_validated_at: '2026-09-02T00:00:00+08:00'
+    accepted_by: team-baseline
+    accepted_at: '2026-09-02T00:00:00+08:00'
+- name: code-review
+  description: 审查代码的正确性、可复现性与数值稳定性。
+  tags:
+  - code
+  - review
+  - reproducibility
+  status: accepted
+  path: .agents/skills/code-review
+  source:
+    type: team
+    location: .
+    revision: worktree-baseline
+    license: project-internal
+  content_sha256: 22f7e7a7d1326e5cb2e940bd7f81acd70a68ae784b7ebb43fdc855de0dec50d5
+  dependencies:
+    conda: []
+    pip: []
+    external: []
+    mcp: []
+  validation:
+    commands: []
+    evidence:
+    - docs/skill-dependency-standard.md
+    last_result: pass
+    last_validated_at: '2026-09-02T00:00:00+08:00'
+    accepted_by: team-baseline
+    accepted_at: '2026-09-02T00:00:00+08:00'
+- name: data-profile
+  description: 对数据集做快速探查并输出字段字典与统计摘要。
+  tags:
+  - data
+  - profiling
+  - quality
+  status: accepted
+  path: .agents/skills/data-profile
+  source:
+    type: team
+    location: .
+    revision: worktree-baseline
+    license: project-internal
+  content_sha256: 359ef89ef4f786d435eb03a52ccc5c0996bc78bcfae430710d1a4df4a895cc6c
+  dependencies:
+    conda:
+    - numpy
+    - pandas
+    pip: []
+    external: []
+    mcp: []
+  validation:
+    commands: []
+    evidence:
+    - docs/skill-dependency-standard.md
+    last_result: pass
+    last_validated_at: '2026-09-02T00:00:00+08:00'
+    accepted_by: team-baseline
+    accepted_at: '2026-09-02T00:00:00+08:00'
+- name: literature-extract
+  description: 从文献中提取问题、模型、算法、结果并写入结构化笔记。
+  tags:
+  - literature
+  - extraction
+  - notes
+  status: accepted
+  path: .agents/skills/literature-extract
+  source:
+    type: team
+    location: .
+    revision: worktree-baseline
+    license: project-internal
+  content_sha256: b544257111319d6c9421d9252f8ca6828a9850069c2aecb7f1452e3a2128f72d
+  dependencies:
+    conda:
+    - bibtexparser
+    - pyyaml
+    pip: []
+    external: []
+    mcp: []
+  validation:
+    commands: []
+    evidence:
+    - docs/skill-dependency-standard.md
+    last_result: pass
+    last_validated_at: '2026-09-02T00:00:00+08:00'
+    accepted_by: team-baseline
+    accepted_at: '2026-09-02T00:00:00+08:00'
+- name: modeling
+  description: 数学建模主技能，负责读题、拆解、选型、数学定义与验证方案。
+  tags:
+  - modeling
+  - competition
+  - contract
+  status: accepted
+  path: .agents/skills/modeling
+  source:
+    type: team
+    location: .
+    revision: worktree-baseline
+    license: project-internal
+  content_sha256: 34699022776abfa5e937b20833100a284a004ed018c3e89a30ac35245cd37a8b
+  dependencies:
+    conda:
+    - pyyaml
+    - requests
+    - python-dotenv
+    - jsonschema
+    pip: []
+    external: []
+    mcp: []
+  validation:
+    commands: []
+    evidence:
+    - docs/skill-dependency-standard.md
+    last_result: pass
+    last_validated_at: '2026-09-02T00:00:00+08:00'
+    accepted_by: team-baseline
+    accepted_at: '2026-09-02T00:00:00+08:00'
+- name: paper-polish
+  description: 在合规范围内润色论文语言、术语与图表规范。
+  tags:
+  - paper
+  - language
+  - formatting
+  status: accepted
+  path: .agents/skills/paper-polish
+  source:
+    type: team
+    location: .
+    revision: worktree-baseline
+    license: project-internal
+  content_sha256: 10e1a51212dde9fd79fba945a558b533847edb00b30575e23a20006e1d9e4548
+  dependencies:
+    conda: []
+    pip: []
+    external: []
+    mcp: []
+  validation:
+    commands: []
+    evidence:
+    - docs/skill-dependency-standard.md
+    last_result: pass
+    last_validated_at: '2026-09-02T00:00:00+08:00'
+    accepted_by: team-baseline
+    accepted_at: '2026-09-02T00:00:00+08:00'
+- name: skill-maintenance
+  description: 管理项目级 Skill 的暂存、依赖安装、验证、接纳与环境漂移检查。
+  tags:
+  - skills
+  - dependencies
+  - maintenance
+  status: accepted
+  path: .agents/skills/skill-maintenance
+  source:
+    type: team
+    location: .
+    revision: worktree-baseline
+    license: project-internal
+  content_sha256: 71a208dabc892b46c2771406596e228430bc6a2af97482d0fa298b3e4b7b68cf
+  dependencies:
+    conda:
+    - pyyaml
+    - jsonschema
+    - conda-lock
+    pip: []
+    external: []
+    mcp: []
+  validation:
+    commands: []
+    evidence:
+    - docs/skill-dependency-standard.md
+    last_result: pass
+    last_validated_at: '2026-09-02T00:00:00+08:00'
+    accepted_by: team-baseline
+    accepted_at: '2026-09-02T00:00:00+08:00'
+- name: zotero-agent
+  description: Use the registered zotero-agent MCP to search, inspect, and—only when
+    explicitly requested—manage the user's local Zotero library. Trigger for Zotero
+    collections, items, PDFs, notes, tags, metadata, duplicates, bibliography export,
+    or Zotero MCP diagnostics.
+  tags:
+  - literature
+  - mcp
+  - zotero
+  status: accepted
+  path: .agents/skills/zotero-agent
+  source:
+    type: local
+    location: .
+    revision: sha256:f66bf3f746bf03da6750971bcd8c8e556e70ed7cb942cf4c87f377740af0e1ab
+    license: project-internal
+  content_sha256: f66bf3f746bf03da6750971bcd8c8e556e70ed7cb942cf4c87f377740af0e1ab
+  dependencies:
+    conda: []
+    pip: []
+    external: []
+    mcp:
+    - name: zotero-agent
+      transport: stdio
+      command: C:\Users\27659\.local\bin\zot.exe
+      args:
+      - mcp
+      env_vars: []
+  validation:
+    commands:
+    - - C:\Users\27659\.local\bin\zot.exe
+      - --version
+    - - codex
+      - mcp
+      - get
+      - zotero-agent
+    evidence:
+    - docs/skill-dependency-standard.md
+    last_result: pass
+    last_validated_at: '2026-09-03T17:05:57+08:00'
+    accepted_by: user
+    accepted_at: '2026-09-03T17:06:15+08:00'

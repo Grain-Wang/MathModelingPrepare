@@ -20,6 +20,10 @@
 - **只写**：`projects/02_modeling/` 目录（三件套）。
 - **只读**：`competition/`、外部参考（见下）、外部 schema、`reference/`、`tools_config.yaml`、`.env`。
 
+### 基础设施维护例外
+
+仅当参赛队员明确要求维护项目级 Skill 或依赖时，可写入 `.agents/`、`scripts/`、`tests/`、`docs/`、`environment.yml`、`environment.win-64.lock.yml`、`Makefile`、`README.md`、`AGENTS.md` 及不含密钥的示例/路径配置。此例外不扩展建模产物的写入范围，且 `competition/`、`reference/`、外部参考、外部 schema 与 `.env` 仍保持只读。维护流程必须遵守 `docs/skill-dependency-standard.md`。
+
 ## 三件套（固定路径 + 固定文件名，缺一不可）
 
 1. `projects/02_modeling/题目分析报告.md`
@@ -58,6 +62,6 @@ Markdown 供人阅读，JSON 合同供下游编码/审查稳定消费。禁止�
 ## 交付与打回反馈
 
 - 写完后即视为「提交草稿」，分别等待 DeepSeek API 与 ChatGPT Pro 网页端的评审反馈。
-- ChatGPT Pro 网页端先读取 `.agent/skills/modeling/references/评审标准.md`，并只读 `AGENTS.md`、`competition/`、三件套及 `reference/literature/zotero_library.bib`；不得修改仓库文件。
+- ChatGPT Pro 网页端先读取 `.agents/skills/modeling/references/评审标准.md`，并只读 `AGENTS.md`、`competition/`、三件套及 `reference/literature/zotero_library.bib`；不得修改仓库文件。
 - 收到任一评审方的修改建议后，由参赛队员确认并转交；**直接修订三件套**（不新建平行版本），在报告里说明变更，再重新提交两方复核。
 - 两方反馈均由参赛队员确认处理完毕后，才进入编码阶段；最终采用与否仍由参赛队员决定。
